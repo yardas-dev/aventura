@@ -14,6 +14,8 @@ class Juego {
     }
 
     adivinar (n) {
+        this.intentos++
+
         if ( this.adivinanza === n ) {
             return {
                 pista: this.pistas.VICTORIA,
