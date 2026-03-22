@@ -1,16 +1,19 @@
 class Juego {
-    AFIRMACIÓN = 'afirmación'
-    COMPARACIÓN = 'comparación'
-    NIVEL_PROXIMIDAD = 'nivel de proximidad (decimal)'
+    TIPO_ES_MAYOR = 'es mayor (booleano)'
+    TIPO_NIVEL_PROXIMIDAD = 'nivel de proximidad (decimal)'
 
     #adivinanza = undefined
+    #inicio_rango = undefined
+    #fin_rango = undefined
     #hasAcertado = false
-    #intentos = 0
+    #intentos = []
     #tipoPista = undefined
 
-    constructor (tipoResultado = this.COMPARACIÓN, n = 1, m = 100) {
-        this.#adivinanza = Math.floor(Math.random() * n) + m
-        this.#tipoResultado = tipoResultado
+    constructor (tipoPista = this.TIPO_ES_MAYOR, inicio_rango = 1, fin_rango = 100) {
+        this.#adivinanza = Math.floor(Math.random() * fin_rango) + inicio_rango
+        this.#inicio_rango = inicio_rango
+        this.#fin_rango = fin_rango
+        this.#tipoPista = tipoPista
     }
 
     adivinar (n) {
@@ -22,23 +25,50 @@ class Juego {
             this.#hasAcertado = true
         }
 
-        let resultado = {
-            hasAcertado: this.#hasAcertado,
-            tipoResultado: this.#tipoResultado,
-            valor: undefined
+        this.#intentos.push(n)
+
+        return this.#hasAcertado
+    }
+
+    verIntento () {
+        return this.#intentos[this.#intentos.length - 1]
+    }
+
+    verIntentos () {
+        return this.#intentos
+    }
+
+    verPista () {
+        if ( this.#hasAcertado ) {
+            return null
         }
 
-        if ( this.tipoResultado === this.AFIRMACIÓN ) {
-            resultado.valor = this.#hasAcertado
-        } else if ( this.tipoResultado === this.COMPARACIÓN ) {
-            resultado.valor = this.#comparar(n)
-        } else if ( this.tipoResultado === this.NIVEL_PROXIMIDAD ) {
-            resultado.valor = this.#obtenerNivelProximidad(n)
+        switch ( this.#tipoPista ) {
+            case this.TIPO_ES_MAYOR:
+                return this.#esMayor()
+
+            case this.TIPO_NIVEL_PROXIMIDAD:
+                return this.#obtenerNivelProximidad()
+
+            default:
+                return null
         }
+    }
 
-        this.#intentos++
+    verSiHasAcertado () {
+        return this.#hasAcertado
+    }
 
-        return resultado
+    verTipoPista () {
+        return this.#tipoPista
+    }
+
+    #esMayor () {
+        return this.#verIntento > this.#adivinanza
+    }
+
+    #obtenerNivelProximidad () {
+        return 0.5 // EN DESARROLLO…
     }
 }
 
