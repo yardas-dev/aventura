@@ -1,8 +1,9 @@
-TIPO_ES_MAYOR = 'es mayor (booleano)'
-TIPO_NIVEL_PROXIMIDAD = 'nivel de proximidad (decimal)'
-TIPOS_VÁLIDOS = [TIPO_ES_MAYOR, TIPO_NIVEL_PROXIMIDAD]
-ERROR_TIPO_INVÁLIDO = 'Tipo de pista inválido'
-ERROR_RANGO_NO_NUMÉRICO = 'Los parámetros de rango deben ser numéricos'
+const TIPO_ES_MAYOR = 'es mayor (booleano)'
+const TIPO_NIVEL_PROXIMIDAD = 'nivel de proximidad (decimal)'
+const TIPOS_VÁLIDOS = [TIPO_ES_MAYOR, TIPO_NIVEL_PROXIMIDAD]
+const ERROR_TIPO_INVÁLIDO = 'Tipo de pista inválido'
+const ERROR_RANGO_NO_NUMÉRICO = 'Los parámetros de rango deben ser numéricos'
+const ERROR_RANGO_INVÁLIDO = 'Rango inválido: el inicio debe ser menor que el fin'
 
 class Juego {
     #adivinanza = undefined
@@ -21,6 +22,10 @@ class Juego {
             throw ERROR_RANGO_NO_NUMÉRICO
         }
 
+        if ( inicioRango >= finRango ) {
+            throw ERROR_RANGO_INVÁLIDO
+        }
+
         this.#adivinanza = Math.floor(Math.random() * finRango) + inicioRango
         this.#inicioRango = inicioRango
         this.#finRango = finRango
@@ -32,7 +37,7 @@ class Juego {
     }
 
     get intentos () {
-        return this.#intentos
+        return [...this.#intentos]
     }
 
     get pista () {
@@ -42,11 +47,13 @@ class Juego {
             valor = null
         } else {
             switch ( this.#tipoPista ) {
-                case this.TIPO_ES_MAYOR:
+                case TIPO_ES_MAYOR:
                     valor = this.#esMayor()
+                    break
 
-                case this.TIPO_NIVEL_PROXIMIDAD:
+                case TIPO_NIVEL_PROXIMIDAD:
                     valor = this.#obtenerNivelProximidad()
+                    break
 
                 default:
                     valor = null
